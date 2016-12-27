@@ -1,31 +1,25 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import io
-from pkgutil import walk_packages
-from setuptools import setup
-
-
-def find_packages(path):
-    # This method returns packages and subpackages as well.
-    return [name for _, name, is_pkg in walk_packages([path]) if is_pkg]
+from setuptools import setup, find_packages
 
 
 def read_file(filename):
-    with io.open(filename) as fp:
+    with open(filename) as fp:
         return fp.read().strip()
 
 
 def read_rst(filename):
     # Ignore unsupported directives by pypi.
-    content = read_file(filename)
-    return ''.join(line for line in io.StringIO(content)
+    return ''.join(line for line in read_file(filename).splitlines()
                    if not line.startswith('.. comment::'))
 
-
-def read_requirements(filename):
-    return [line.strip() for line in read_file(filename).splitlines()
-            if not line.startswith('#')]
-
+EXTRAS_REQUIRE = {
+    'brotli': ['brotli>=0.5'],
+    'lz4': ['lz4>=0.8'],
+    'lzo': ['python-lzo>=1.09'],
+    'snappy': ['pysnappy>=0.6'],
+    'zstd': ['zstandard>=0.5'],
+}
+EXTRAS_REQUIRE['all'] = list(dep for deps in EXTRAS_REQUIRE.values() for dep in deps)
 
 setup_attrs = dict(
     name='fastavro-codecs',
@@ -33,13 +27,14 @@ setup_attrs = dict(
     description="Fastavro codecs.",
     long_description=read_rst('README.rst') + '\n\n' + read_rst('HISTORY.rst'),
     author="Rolando Espinoza",
-    author_email='rolando at rmax.io',
+    author_email='rolando@rmax.io',
     url='https://github.com/rolando/fastavro-codecs',
     packages=list(find_packages('src')),
     package_dir={'': 'src'},
-    setup_requires=read_requirements('requirements-setup.txt'),
-    install_requires=read_requirements('requirements-install.txt'),
-    include_package_data=True,
+    install_requires=[
+        'fastavro>=0.9.6',
+    ],
+    extras_require=EXTRAS_REQUIRE,
     license="MIT",
     keywords='fastavro-codecs',
     classifiers=[

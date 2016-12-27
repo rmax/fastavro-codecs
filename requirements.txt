@@ -1,0 +1,8 @@
+# This index contains manylinux wheels for this dependencies.
+--extra-index-url https://pypi.anaconda.org/rolando/simple
+brotli
+fastavro
+lz4
+pysnappy
+python-lzo
+zstandard

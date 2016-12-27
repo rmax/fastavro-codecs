@@ -38,6 +38,26 @@ Features
 
 FIXME
 
+Available codecs::
+
+apt-get install libsnappy-dev liblzo2-dev
+
+Command line wrapper.
+
+.. code:: 
+
+  $ python -m fastavro_codecs --codecs
+  brotli
+  deflate
+  lz4
+  lzma
+  lzo
+  null
+  snappy
+  xz
+  zstd
+
+
 Quickstart
 ----------
 
